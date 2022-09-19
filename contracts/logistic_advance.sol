@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: Non-License
 pragma solidity 0.8.17;
 
+import "./interfaces/IFishMarket.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
 enum StateType {
     Idle,
     Created,
@@ -22,14 +25,9 @@ struct Deal {
     StateType transportState;
 }
 
-contract Logistic {
-    address owner;
+contract Logistic is Ownable {
     mapping(bytes32 => Deal) public deals;
-
-    modifier onlyOwner() {
-        require(msg.sender == owner, "unauthorized");
-        _;
-    }
+    IFishMarket internal fishMarket;
 
     modifier onlyTransporter(bytes32 dealId) {
         require(msg.sender == deals[dealId].transporter, "unauthorized");
@@ -41,8 +39,8 @@ contract Logistic {
         _;
     }
 
-    constructor() {
-        owner = msg.sender;
+    constructor(address _fishMarket) {
+        fishMarket = IFishMarket(_fishMarket);
     }
 
     /*
@@ -160,7 +158,7 @@ contract Logistic {
 
         uint256 amountToOwner = (deal.price * 9) / 10;
         if (deal.transportState == StateType.Complete) {
-            _transfer(owner, amountToOwner);
+            _transfer(owner(), amountToOwner);
             _transfer(deal.transporter, deal.price - amountToOwner);
         }
 
