@@ -29,7 +29,6 @@ contract FishMarket is Ownable {
         require(_minTemperature <= _maxTemperature, "invalid maxTemperature");
 
         _productId = keccak256(abi.encodePacked(_productName));
-        console.logBytes32(_productId);
 
         Stock storage stock = stocks[_productId];
         require(stock.price == 0, "product is already exist.");

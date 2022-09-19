@@ -55,11 +55,7 @@ contract Logistic is Ownable {
         uint256 _quantity
     ) public onlyOwner returns (Deal memory) {
         Stock memory stock = fishMarket.getStock(_productName);
-        // console.log(stock.productName);
-        // console.log(stock.price);
-        // console.log(stock.minTemperature);
-        // console.log(stock.maxTemperature);
-        // console.log(stock.quantity);
+
         require(_quantity <= stock.quantity, "out of order");
 
         fishMarket.removeStockQuantity(_quantity, _productName);
