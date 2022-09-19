@@ -3,7 +3,7 @@ pragma solidity ^0.8.17;
 pragma experimental ABIEncoderV2;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-// import "hardhat/console.sol";
+import "hardhat/console.sol";
 
 struct Stock {
     bytes32 productId;
@@ -29,6 +29,7 @@ contract FishMarket is Ownable {
         require(_minTemperature <= _maxTemperature, "invalid maxTemperature");
 
         _productId = keccak256(abi.encodePacked(_productName));
+        console.logBytes32(_productId);
 
         Stock storage stock = stocks[_productId];
         require(stock.price == 0, "product is already exist.");
